@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('doctors_availabilities', function (Blueprint $table) {
             $table->id();
-            $table->foreign('tenant_id')->constrained('clinics')->cascadeOnDelete();
-            $table->foreign('doctor_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('tenant_id')->constrained('clinics')->cascadeOnDelete();
+            $table->foreignId('doctor_id')->constrained('users')->cascadeOnDelete();
             $table->unsignedBigInteger('day_of_week');   //0 = Sunday, 1 = Monday, ..., 6 = Saturday
             $table->time('start_time');
             $table->time('end_time');

@@ -1,46 +1,103 @@
+import { Link, usePage } from '@inertiajs/react';
+import {
+    BookOpen,
+    FolderGit2,
+    LayoutGrid,
+    Users,
+    UserCircle,
+    Calendar,
+    CalendarPlus,
+    CheckCircle,
+    Building2,
+    Clock
+} from 'lucide-react';
+import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
-import AppLogo from './app-logo';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        url: '/dashboard',
-        icon: LayoutGrid,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
-];
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import type { NavItem } from '@/types';
 
 export function AppSidebar() {
+    const page = usePage();
+    const user = (page.props.auth as { user: { role?: string } }).user;
+
+    //Super admin has no team always use /dashboard
+    const dashboardUrl = '/dashboard';
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            url: dashboardUrl,
+            icon: LayoutGrid,
+        },
+    ];
+
+    if (user?.role === 'super_admin') {
+        mainNavItems.push(
+            { title: 'Clinics', url: '/admin/clinics', icon: FolderGit2 },
+            { title: 'Users', url: '/admin/users', icon: Users },
+        );
+    } else if (user?.role === 'clinic_admin') {
+        mainNavItems.push(
+            { title: 'Doctors', url: '/doctors', icon: Users },
+            { title: 'Patients', url: '/patients', icon: UserCircle },
+            { title: 'Approvals', url: '/admin/approvals', icon: CheckCircle },
+            { title: 'Appointments', url: '/appointments', icon: Calendar },
+        );
+    } else if (user?.role === 'doctor') {
+        mainNavItems.push(
+            { title: 'My Schedule', url: '/doctor/availability', icon: Clock },
+            { title: 'My Appointments', url: '/appointments', icon: Calendar },
+            { title: 'My Patients', url: '/patients', icon: UserCircle },
+        );
+    } else if (user?.role === 'patient') {
+        mainNavItems.push(
+            { title: 'Find a Doctor', url: '/doctors', icon: Users },
+            { title: 'My Appointments', url: '/appointments', icon: CalendarPlus },
+        );
+    }
+
+    const footerNavItems: NavItem[] = [
+        {
+            title: 'Documentation',
+            url: 'https://laravel.com/docs/starter-kit#react',
+            icon: BookOpen,
+        },
+    ];
+
+    const isSuperAdmin = user?.role === 'super_admin';
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={dashboardUrl} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
+                {isSuperAdmin && (
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
+                                <Building2 className="h-3 w-3" />
+                                <span>Super Administrator</span>
+                            </div>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                )}
             </SidebarHeader>
 
             <SidebarContent>

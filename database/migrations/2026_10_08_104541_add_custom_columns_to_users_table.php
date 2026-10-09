@@ -26,13 +26,13 @@ return new class extends Migration
                 ->nullable()
                 ->after('role');
 
-            $table->string('specialty')
+            $table->string('speciality')
                 ->nullable()
                 ->after('phone');
 
             $table->integer('age')
                 ->nullable()
-                ->after('specialty');
+                ->after('speciality');
 
             $table->string('gender')
                 ->nullable()
@@ -54,13 +54,10 @@ return new class extends Migration
             $table->dropColumn([
                 'role',
                 'phone', 
-                'specialty',
+                'speciality',
                 'age',
                 'gender',
-                'is_active',
-                'two_factor_secret',
-                'two_factor_recovery_codes',
-                'two_factor_confirmed_at'
+                'is_active'
             ]);
         });
     }

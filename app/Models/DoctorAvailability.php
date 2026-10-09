@@ -10,6 +10,8 @@ class DoctorAvailability extends Model
 {
     use BelongsToTenant;
 
+    protected $table = 'doctors_availabilities';
+
     protected $fillable = [
         'tenant_id',
         'doctor_id',
