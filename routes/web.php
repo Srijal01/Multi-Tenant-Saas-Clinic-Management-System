@@ -10,7 +10,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin. ')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     //Clinics CRUD
     Route::get('clinics', [SuperAdminController::class, 'indexClinics'])->name('clinics.index');
     Route::get('clinics/create', [SuperAdminController::class, 'createClinic'])->name('clinics.create');
