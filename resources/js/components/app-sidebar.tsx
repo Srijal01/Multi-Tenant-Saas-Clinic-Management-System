@@ -74,8 +74,6 @@ export function AppSidebar() {
         },
     ];
 
-    const isSuperAdmin = user?.role === 'super_admin';
-
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -88,16 +86,14 @@ export function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                {isSuperAdmin && (
-                    <SidebarMenu>
-                        <SidebarMenuItem>
-                            <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
-                                <Building2 className="h-3 w-3" />
-                                <span>Super Administrator</span>
-                            </div>
-                        </SidebarMenuItem>
-                    </SidebarMenu>
-                )}
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
+                            <Building2 className="h-3 w-3" />
+                            <span>{user?.role === 'super_admin' ? 'Super Administrator' : 'Clinic Platform'}</span>
+                        </div>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
 
             <SidebarContent>
