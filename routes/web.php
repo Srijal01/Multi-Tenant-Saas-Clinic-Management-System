@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ClinicAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SuperAdminController;
+use App\Models\Clinic;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -22,6 +24,20 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('users', [SuperAdminController::class, 'indexUsers'])->name('users.index');
     Route::patch('users/{user}/toggle', [SuperAdminController::class, 'toggleUserStatus'])->name('users.toggle');
 });
+
+//Clinic Admin Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    //Doctors & Patients List
+    Route::get('doctors', [ClinicAdminController::class, 'indexDoctors'])->name('doctors.index');
+    Route::get('patients', [ClinicAdminController::class, 'indexPatients'])->name('patients.index');
+
+    //Approvals (under admin prefix)
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('approvals', [ClinicAdminController::class, 'indexApprovals'])->name('approvals.index');
+        Route::post('approvals/{id}/approve', [ClinicAdminController::class, 'approveDoctor'])->name('approvals.approve');
+    });
+});
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
