@@ -1,8 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {Head, Link} from '@inertiajs/react';
+import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';  
+import {Button} from '@/components/ui/button';
+import {Users, UserCircle, AlertCircle, CalendarDays} from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { CalendarDays, CheckCircle2, Stethoscope, Users } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,60 +13,76 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Props {
+interface Props{
     totalDoctors?: number;
     totalPatients?: number;
     pendingDoctors?: number;
 }
 
-export default function Dashboard({ totalDoctors = 0, totalPatients = 0, pendingDoctors = 0 }: Props) {
+export default function ClinicDashboard({totalDoctors = 0, totalPatients = 0, pendingDoctors = 0}: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
-            <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6">
+            <Head title="Clinic Dashboard" />
+
+            <div className="flex flex-1 flex-col gap-6 p-4 lg:p-6">
+
+                {/*Stats Grid*/}
                 <div className="grid gap-4 md:grid-cols-3">
                     <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Doctors</CardTitle>
-                            <Stethoscope className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-2xl font-bold">{totalDoctors}</p>
-                            <p className="text-xs text-muted-foreground">Active doctors in your clinic</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Patients</CardTitle>
+                        <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Total Doctors</CardTitle>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <p className="text-2xl font-bold">{totalPatients}</p>
-                            <p className="text-xs text-muted-foreground">Registered clinic patients</p>
+                            <div className="text-2xl font-bold">{totalDoctors}</div>  
                         </CardContent>
                     </Card>
                     <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-muted-foreground">Pending approvals</CardTitle>
-                            <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                        <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Total Patients</CardTitle>
+                            <UserCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <p className="text-2xl font-bold">{pendingDoctors}</p>
-                            <p className="text-xs text-muted-foreground">Doctors awaiting approval</p>
+                            <div className="text-2xl font-bold">{totalPatients}</div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Pending Approvals - Using amber only for emphasis, adaptive for dark mode */}
+                    <Card className={pendingDoctors > 0 ? 'border-amber-500/50 bg-amber-500/50' : ''}>
+                        <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Pending Approvals</CardTitle>
+                            <AlertCircle className={`h-4 w-4 ${pendingDoctors > 0 ? 'text-amber-500' : 'text-muted-foreground'}`} />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{pendingDoctors}</div>
+                            {pendingDoctors > 0 && (
+                                <Link href="/admin/approvals" className="text-xs text-amber-600 dark:text-amber-400 hover:underline font-medium">
+                                    Review Pending
+                                </Link>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
-                <Card className="min-h-[400px] flex-1">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <CalendarDays className="h-5 w-5" />
-                            Today&apos;s clinic activity
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex min-h-[300px] items-center justify-center text-sm text-muted-foreground">
-                        No activity to display yet.
-                    </CardContent>
-                </Card>
+
+                {/* Main Content Area */}
+                <div className="relative min-h-[400px] flex-1 overflow-hidden rounded-xl border border-dashed bg-muted/30">
+                    <PlaceholderPattern className="absolute inset-0 size-full stroke-foreground/5" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+                        {/* Icon Container - No longer hardcoded white */}
+                        <div className="rounded-full bg-background p-3 shadow-sm border border-border">
+                            <CalendarDays className="h-6 w-6 text-muted-foreground" />
+                        </div>
+                        <div className="text-center">
+                            <h3 className="text-sm font-semibold text-foreground">Appointment Overview</h3>
+                            <p className="text-sm text-muted-foreground">Analytics and scheduling date will appear here.</p>
+                        </div>
+                        <Link href="/appoinyments">
+                            <Button variant="outline" size="sm">
+                                View Full Calendar
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
             </div>
         </AppLayout>
     );
