@@ -40,9 +40,9 @@ class ClinicAdminController extends Controller
                     'id' => $doctor->id,
                     'name' => $doctor->name,
                     'email' => $doctor->email,
-                    'specialty' => $doctor->specialty,
+                    'speciality' => $doctor->speciality,
                     'availabilities' => $availabilities,
-                    'has_availabilities' => $availabilities->isNotEmpty(),
+                    'has_availability' => $availabilities->isNotEmpty(),
                 ];
             });
 
