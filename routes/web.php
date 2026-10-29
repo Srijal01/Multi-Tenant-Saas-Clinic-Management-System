@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClinicAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\AppointmentController;
 use App\Models\Clinic;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('approvals/{id}/approve', [ClinicAdminController::class, 'approveDoctor'])->name('approvals.approve');
     });
 });
+
+
+//Shared Routes Appointments
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+});
+
 
 
 require __DIR__.'/settings.php';
