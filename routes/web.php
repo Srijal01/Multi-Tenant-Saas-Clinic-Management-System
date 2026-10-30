@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClinicAdminController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Models\Clinic;
@@ -45,6 +46,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
 });
 
+
+//Doctor Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('appointments/{appointment}/confirm', [DoctorController::class, 'confirmAppointment'])->name('appointments.confirm');
+    Route::post('appointments/{appointment}/complete', [DoctorController::class, 'completeAppointment'])->name('appointments.complete');
+
+    //Weekly Availability
+    Route::get('doctor/availability', [DoctorController::class, 'indexAvailability'])->name('doctor.availability.index');
+    Route::post('doctor/availability', [DoctorController::class, 'updateAvailability'])->name('doctor.availability.update');
+});
 
 
 require __DIR__.'/settings.php';
