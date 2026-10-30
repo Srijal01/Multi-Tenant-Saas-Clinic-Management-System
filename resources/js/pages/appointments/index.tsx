@@ -13,6 +13,8 @@ import {Input} from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {CalendarDays, Clock, User, UserCog, Check, ClipboardCheck, Search} from 'lucide-react';
 import {useState} from 'react';
+import AppLayout from '@/layouts/app-layout';
+import {type BreadcrumbItem} from '@/types';
 import {
     Dialog,
     DialogContent,
@@ -54,6 +56,13 @@ const statusLabels: Record<string, string> = {
     cancelled: 'Cancelled',
     confirmed: 'Confirmed',
 };
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Appointments',
+        href: '/appointments',
+    },
+];
 
 export default function AppointmentsIndex({appointments}: Props) {
     const {auth} = usePage().props as any;
@@ -127,7 +136,7 @@ export default function AppointmentsIndex({appointments}: Props) {
     };
 
     return (
-        <>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Appointments" />
 
             <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6">
@@ -351,6 +360,6 @@ export default function AppointmentsIndex({appointments}: Props) {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </>
+        </AppLayout>
     );
 }
