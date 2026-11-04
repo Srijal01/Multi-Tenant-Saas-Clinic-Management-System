@@ -1,30 +1,11 @@
-import { Link, usePage } from '@inertiajs/react';
-import {
-    BookOpen,
-    FolderGit2,
-    LayoutGrid,
-    Users,
-    UserCircle,
-    Calendar,
-    CalendarPlus,
-    CheckCircle,
-    Building2,
-    Clock
-} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
+import { BookOpen, Building2, Calendar, CalendarPlus, CheckCircle, Clock, FolderGit2, LayoutGrid, UserCircle, Users } from 'lucide-react';
 
 export function AppSidebar() {
     const page = usePage();
@@ -42,10 +23,7 @@ export function AppSidebar() {
     ];
 
     if (user?.role === 'super_admin') {
-        mainNavItems.push(
-            { title: 'Clinics', url: '/admin/clinics', icon: FolderGit2 },
-            { title: 'Users', url: '/admin/users', icon: Users },
-        );
+        mainNavItems.push({ title: 'Clinics', url: '/admin/clinics', icon: FolderGit2 }, { title: 'Users', url: '/admin/users', icon: Users });
     } else if (user?.role === 'clinic_admin') {
         mainNavItems.push(
             { title: 'Doctors', url: '/doctors', icon: Users },
@@ -75,7 +53,7 @@ export function AppSidebar() {
     ];
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="inset" className="border-r-0">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -88,8 +66,8 @@ export function AppSidebar() {
                 </SidebarMenu>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
-                            <Building2 className="h-3 w-3" />
+                        <div className="text-muted-foreground flex items-center gap-2 px-2 py-1.5 text-xs group-data-[collapsible=icon]:hidden">
+                            <Building2 className="text-sidebar-primary h-3 w-3" />
                             <span>{user?.role === 'super_admin' ? 'Super Administrator' : 'Clinic Platform'}</span>
                         </div>
                     </SidebarMenuItem>

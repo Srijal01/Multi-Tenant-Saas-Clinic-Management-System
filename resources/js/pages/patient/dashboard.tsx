@@ -103,7 +103,7 @@ export default function PatientDashboard({ upcomingAppointments = 0, totalVisits
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row">
                                 <Link href="/appointments">
-                                    <Button className="bg-blue-600 text-white shadow-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                                    <Button className="shadow-sm">
                                         <Calendar className="mr-2 h-4 w-4" />
                                         Book New Appointment
                                     </Button>
