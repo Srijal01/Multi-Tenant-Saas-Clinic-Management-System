@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { ChevronDown, LoaderCircle, Stethoscope, UserRound } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
@@ -10,18 +10,32 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
 interface RegisterForm {
+    [key: string]: string;
     name: string;
     email: string;
     password: string;
     password_confirmation: string;
+    role: 'doctor' | 'patient';
+    tenant_id: string;
 }
 
-export default function Register() {
+interface Clinic {
+    id: number;
+    name: string;
+}
+
+interface RegisterProps {
+    clinics?: Clinic[];
+}
+
+export default function Register({ clinics = [] }: RegisterProps) {
     const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        role: 'doctor',
+        tenant_id: '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -36,6 +50,54 @@ export default function Register() {
             <Head title="Register" />
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
+                    <div className="grid gap-2">
+                        <Label htmlFor="role">I am a</Label>
+                        <div className="relative">
+                            {data.role === 'doctor' ? (
+                                <Stethoscope className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
+                            ) : (
+                                <UserRound className="text-muted-foreground absolute top-3 left-3 h-4 w-4" />
+                            )}
+                            <select
+                                id="role"
+                                value={data.role}
+                                onChange={(e) => setData('role', e.target.value as RegisterForm['role'])}
+                                disabled={processing}
+                                className="border-input bg-background ring-offset-background focus:ring-ring h-10 w-full appearance-none rounded-md border px-9 py-2 text-sm focus:ring-2 focus:outline-hidden"
+                            >
+                                <option value="doctor">Doctor</option>
+                                <option value="patient">Patient</option>
+                            </select>
+                            <ChevronDown className="text-muted-foreground pointer-events-none absolute top-3 right-3 h-4 w-4" />
+                        </div>
+                        <InputError message={errors.role} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="tenant_id">Select Clinic</Label>
+                        <div className="relative">
+                            <select
+                                id="tenant_id"
+                                value={data.tenant_id}
+                                onChange={(e) => setData('tenant_id', e.target.value)}
+                                disabled={processing}
+                                required
+                                className="border-input bg-background ring-offset-background focus:ring-ring h-10 w-full appearance-none rounded-md border px-3 py-2 text-sm focus:ring-2 focus:outline-hidden"
+                            >
+                                <option value="" disabled>
+                                    Select a clinic...
+                                </option>
+                                {clinics.map((clinic) => (
+                                    <option key={clinic.id} value={clinic.id}>
+                                        {clinic.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <ChevronDown className="text-muted-foreground pointer-events-none absolute top-3 right-3 h-4 w-4" />
+                        </div>
+                        <InputError message={errors.tenant_id} />
+                    </div>
+
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
                         <Input
@@ -98,7 +160,7 @@ export default function Register() {
                             disabled={processing}
                             placeholder="Confirm password"
                         />
-                        <InputError message={errors.password_confirmation} />
+                        <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
                     <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>

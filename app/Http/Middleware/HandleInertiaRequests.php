@@ -15,6 +15,16 @@ class HandleInertiaRequests extends Middleware
      *
      * @var string
      */
+
+    public function handle(Request $request, \Closure $next)
+    {
+        if (auth()->check() && !auth()->user()->is_active && !$request->routeIs('dashboard', 'logout')) {
+            return redirect()->route('dashboard');
+        }
+
+        return parent::handle($request, $next);
+    }
+    
     protected $rootView = 'app';
 
     /**
