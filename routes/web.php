@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClinicAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Models\Clinic;
@@ -55,6 +56,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Weekly Availability
     Route::get('doctor/availability', [DoctorController::class, 'indexAvailability'])->name('doctor.availability.index');
     Route::post('doctor/availability', [DoctorController::class, 'updateAvailability'])->name('doctor.availability.update');
+});
+
+
+//Patient Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('appointments', [PatientController::class, 'storeAppointment'])->name('appointments.store');
 });
 
 
